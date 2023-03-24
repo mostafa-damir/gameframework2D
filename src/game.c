@@ -8,14 +8,19 @@
 #include "simple_json_object.h"
 #include "level.h"
 #include "camera.h"
+#include "sniper.h"
 #include "entity.h"
 #include "ammoBox.h"
+#include "gui.h"
 #include "armorBox.h"
 #include "arPickup.h"
 #include "cash.h"
 #include "space_bug.h"
 #include "player.h"
+#include "meleeGrunt.h"
 #include "grunt.h"
+#include "gunner.h"
+#include "firstBoss.h"
 #include "weapons.h"
 #include "healthKit.h"
 
@@ -59,19 +64,25 @@ int main(int argc, char* argv[])
     SDL_ShowCursor(SDL_DISABLE);
     
     /*demo setup*/
+    sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
+    //sprite = gf2d_sprite_load_image("images/hud-sprite.png");
+    mouse = gf2d_sprite_load_all("images/pointer.png", 32, 32, 16, 0);
     level = level_load("config/test.level");
     level_set_active_level(level);
-    sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
-    mouse = gf2d_sprite_load_all("images/pointer.png", 32, 32, 16, 0);
     //ent = space_bug_new(vector2d(1000, 1000));
+    gui_setup_hud();
     ent = player_new(vector2d(100, 900));
     ent = healthKit_new(vector2d(200, 900));
     ent = healthKit_new(vector2d(400, 900));
     ent = armorBox_new(vector2d(500, 900));
     ent = cash_new(vector2d(600, 900));
+    ent = meleeGrunt_new(vector2d(800, 650));
     ent = arPickup_new(vector2d(700, 900));
     ent = ammoBox_new(vector2d(600, 1050));
     ent = grunt_new(vector2d(800, 1050));
+    ent = gunner_new(vector2d(1000, 1000));
+    ent = firstBoss_new(vector2d(1100, 800));
+    ent = sniper_new(vector2d(700, 650));
     /*main game loop*/
     while (!done)
     {
@@ -102,6 +113,7 @@ int main(int argc, char* argv[])
             NULL,
             &mouseColor,
             (int)mf);*/
+        gui_draw_hud();
         gf2d_graphics_next_frame();// render current draw frame and skip to the next frame
 
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition

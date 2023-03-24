@@ -4,45 +4,45 @@
 #include "level.h"
 #include "bullet.h"
 #include "player.h"
-#include "grunt.h"
+#include "meleeGrunt.h"
 
-void grunt_think(Entity* ent);
+void meleeGrunt_think(Entity* ent);
 //void grunt_draw(Entity* ent);
-void grunt_free(Entity* ent);
+void meleeGrunt_free(Entity* ent);
 
-static Entity* Grunt = NULL;
+static Entity* meleeGrunt = NULL;
 
 
-Entity* grunt_new(Vector2D position)
+Entity* meleeGrunt_new(Vector2D position)
 {
 	Entity* ent;
 	ent = entity_new();
 	if (!ent)return NULL;
-	ent->sprite = gf2d_sprite_load_all("images/grunt-sprite.png",
+	ent->sprite = gf2d_sprite_load_all("images/meleeGrunt-sprite.png",
 		64,
 		64,
 		16,
 		0);
-	ent->think = grunt_think;
+	ent->think = meleeGrunt_think;
 	//ent->draw = grunt_draw;
 	ent->drawOffset = vector2d(32, 64);
-	ent->free_entity = grunt_free;
+	ent->free_entity = meleeGrunt_free;
 	ent->shape = gfc_shape_rect(-10, -37, 20, 37);
 	ent->shape = ent->shape;
 	vector2d_copy(ent->position, position);
 
-	GruntData* gruntStat = gfc_allocate_array(sizeof(GruntData), 1);
-	gruntStat->health = 100;
-	gruntStat->speed = 2.5;
-	gruntStat->damage = 10;
-	ent->data = gruntStat;
-	Grunt = ent;
+	meleeGruntData* stat = gfc_allocate_array(sizeof(meleeGruntData), 1);
+	stat->health = 100;
+	stat->speed = 2.5;
+	stat->damage = 10;
+	ent->data = stat;
+	meleeGrunt = ent;
 	return ent;
 }
 
-Entity* grunt_get()
+Entity* meleeGrunt_get()
 {
-	return Grunt;
+	return meleeGrunt;
 }
 //void grunt_draw(Entity* ent)
 //{
@@ -56,7 +56,7 @@ Entity* grunt_get()
 //	gf2d_draw_rect(toDraw, GFC_COLOR_YELLOW);
 //}
 
-void grunt_think(Entity* ent)
+void meleeGrunt_think(Entity* ent)
 {
 	if (!ent) return;
 	ent->velocity.x = 0;
@@ -68,19 +68,15 @@ void grunt_think(Entity* ent)
 	a = player_get_position();
 	b = ent->position;
 	float distance = vector2d_magnitude_between(a, b);
-	if (distance  < 200/* && player_get_position().y == ent->position.y*/)
+	if (distance < 100 && distance != 16/* && player_get_position().y == ent->position.y*/)
 	{
-		//ent->velocity.x -= 1;
-		Vector2D place = vector2d(0, 0);
-		place.x = ent->position.x - 47;
-		place.y = ent->position.y - 47;
-		bullet_new(vector2d(place.x, place.y), 2, 0.1, 10);
+		ent->velocity.x -= 1;
 	}
 
 }
-void grunt_free(Entity* ent)
+void meleeGrunt_free(Entity* ent)
 {
 	if (!ent)return;
 	/*ent->sprite = NULL;*/
-	Grunt = NULL;
+	meleeGrunt = NULL;
 }

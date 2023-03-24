@@ -4,59 +4,48 @@
 #include "level.h"
 #include "bullet.h"
 #include "player.h"
-#include "grunt.h"
+#include "gunner.h"
 
-void grunt_think(Entity* ent);
+void gunner_think(Entity* ent);
 //void grunt_draw(Entity* ent);
-void grunt_free(Entity* ent);
+void gunner_free(Entity* ent);
 
-static Entity* Grunt = NULL;
+static Entity* Gunner = NULL;
 
 
-Entity* grunt_new(Vector2D position)
+Entity* gunner_new(Vector2D position)
 {
 	Entity* ent;
 	ent = entity_new();
 	if (!ent)return NULL;
-	ent->sprite = gf2d_sprite_load_all("images/grunt-sprite.png",
+	ent->sprite = gf2d_sprite_load_all("images/gunner-sprite.png",
 		64,
 		64,
 		16,
 		0);
-	ent->think = grunt_think;
+	ent->think = gunner_think;
 	//ent->draw = grunt_draw;
 	ent->drawOffset = vector2d(32, 64);
-	ent->free_entity = grunt_free;
+	ent->free_entity = gunner_free;
 	ent->shape = gfc_shape_rect(-10, -37, 20, 37);
 	ent->shape = ent->shape;
 	vector2d_copy(ent->position, position);
 
-	GruntData* gruntStat = gfc_allocate_array(sizeof(GruntData), 1);
-	gruntStat->health = 100;
-	gruntStat->speed = 2.5;
-	gruntStat->damage = 10;
-	ent->data = gruntStat;
-	Grunt = ent;
+	GunnerData* gunnerStat = gfc_allocate_array(sizeof(GunnerData), 1);
+	gunnerStat->health = 100;
+	gunnerStat->speed = 2.5;
+	gunnerStat->damage = 10;
+	ent->data = gunnerStat;
+	Gunner = ent;
 	return ent;
 }
 
-Entity* grunt_get()
+Entity* gunner_get()
 {
-	return Grunt;
+	return Gunner;
 }
-//void grunt_draw(Entity* ent)
-//{
-//	Vector2D drawPosition;
-//	if (!ent)return;
-//	vector2d_add(drawPosition, ent->position);
-//	Rect toDraw = ent->shape.s.r;
-//	toDraw.x += ent->position.x;
-//	toDraw.y += ent->position.y;
-//	vector2d_add(toDraw, toDraw);
-//	gf2d_draw_rect(toDraw, GFC_COLOR_YELLOW);
-//}
 
-void grunt_think(Entity* ent)
+void gunner_think(Entity* ent)
 {
 	if (!ent) return;
 	ent->velocity.x = 0;
@@ -68,7 +57,7 @@ void grunt_think(Entity* ent)
 	a = player_get_position();
 	b = ent->position;
 	float distance = vector2d_magnitude_between(a, b);
-	if (distance  < 200/* && player_get_position().y == ent->position.y*/)
+	if (distance < 200/* && player_get_position().y == ent->position.y*/)
 	{
 		//ent->velocity.x -= 1;
 		Vector2D place = vector2d(0, 0);
@@ -78,9 +67,9 @@ void grunt_think(Entity* ent)
 	}
 
 }
-void grunt_free(Entity* ent)
+void gunner_free(Entity* ent)
 {
 	if (!ent)return;
 	/*ent->sprite = NULL;*/
-	Grunt = NULL;
+	Gunner = NULL;
 }

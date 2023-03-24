@@ -51,7 +51,7 @@ void bullet_think(Entity* ent)
     {
         ent->velocity.x -= ent->speed;
     }
-    if (gfc_input_command_pressed("attack") && ((PlayerData*)(player_get()->data))->ammo != 0)
+    if (gfc_input_command_pressed("attack") && ((PlayerData*)(player_get()->data))->ammo != 0 && ent->team == 1)
     {
         ((PlayerData*)(player_get()->data))->ammo = ((PlayerData*)(player_get()->data))->ammo - 1;
         slog("%i", ((PlayerData*)(player_get()->data))->ammo);
