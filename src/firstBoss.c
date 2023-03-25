@@ -23,7 +23,7 @@ Entity* firstBoss_new(Vector2D position)
 		0);
 	ent->think = firstBoss_think;
 	//ent->draw = grunt_draw;
-	ent->drawOffset = vector2d(32, 64);
+	ent->drawOffset = vector2d(64, 128);
 	ent->free_entity = firstBoss_free;
 	ent->shape = gfc_shape_rect(-10, -37, 20, 37);
 	ent->shape = ent->shape;
@@ -51,11 +51,11 @@ void firstBoss_think(Entity* ent)
 	if (level_shape_clip(level_get_active_level(), entity_get_shape_after_move(ent)) == 1) {
 		ent->velocity.y = 0;
 	}
-	/*if (gfc_input_command_down("half"))
+	if (gfc_input_command_down("half"))
 	{
-		ent->health = 500;
+		((firstBossData*)(ent->data))->health = 500;
 	}
-	if (ent->health <= 500)
+	if (((firstBossData*)(ent->data))->health <= 500)
 	{
 		((firstBossData*)(ent->data))->tiers = 1;
 		ent->sprite = gf2d_sprite_load_all("images/bossPhase2.png",
@@ -63,7 +63,16 @@ void firstBoss_think(Entity* ent)
 			128,
 			16,
 			0);
-	}*/
+	}
+	else if (((firstBossData*)(ent->data))->health == 1000)
+	{
+		((firstBossData*)(ent->data))->tiers = 0;
+		ent->sprite = gf2d_sprite_load_all("images/bossPhase1.png",
+			128,
+			128,
+			16,
+			0);
+	}
 }
 void firstBoss_free(Entity* ent)
 {

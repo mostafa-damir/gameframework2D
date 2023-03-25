@@ -1,7 +1,7 @@
 #include "simple_logger.h"
 
 #include "gfc_input.h"
-
+#include "gui.h"
 #include "gf2d_graphics.h"
 #include "gf2d_draw.h"
 #include "camera.h"
@@ -65,7 +65,7 @@ Entity* player_new(Vector2D position)
 	playerStat->maxAmmo = 1000;
 	playerStat->armor = 25;
 	playerStat->maxArmor = 100;
-	playerStat->health = 50;
+	playerStat->health =  75;
 	playerStat->maxHealth = 100;
 	playerStat->cash = 0;
 	playerStat->ar = 0;
@@ -96,6 +96,7 @@ void player_draw(Entity* self)
 	if (!self)return;
 	camera = camera_get_draw_offset();
 	vector2d_add(drawPosition, self->position, camera);
+	gui_set_health(((PlayerData*)(self->data))->health / (float)((PlayerData*)(self->data))->maxHealth);
 	Rect toDraw = self->shape.s.r;
 	toDraw.x += self->position.x;
 	toDraw.y += self->position.y;
@@ -132,6 +133,10 @@ void player_think(Entity* self)
 		if (gfc_input_command_down("walkright"))
 		{
 			walk.x += 1;
+		}
+		if (gfc_input_command_down("hurt"))
+		{
+			((PlayerData*)(self->data))->health -= 10;
 		}
 		if (gfc_input_command_down("switchToKnife"))
 		{

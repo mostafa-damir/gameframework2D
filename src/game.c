@@ -81,7 +81,7 @@ int main(int argc, char* argv[])
     ent = ammoBox_new(vector2d(600, 1050));
     ent = grunt_new(vector2d(800, 1050));
     ent = gunner_new(vector2d(1000, 1000));
-    ent = firstBoss_new(vector2d(1100, 800));
+    ent = firstBoss_new(vector2d(1900, 800));
     ent = sniper_new(vector2d(700, 650));
     /*main game loop*/
     while (!done)

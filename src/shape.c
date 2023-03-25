@@ -1,6 +1,7 @@
-#include "gf2d_shape.h"
+#include "gfc_shape.h"
 #include "gf2d_draw.h"
 #include "simple_logger.h"
+#include "gfc_color.h"
 
 Rect gf2d_rect(float x, float y, float w, float h)
 {
@@ -11,7 +12,7 @@ Rect gf2d_rect(float x, float y, float w, float h)
 
 void gf2d_rect_draw(Rect r, Color color)
 {
-    gf2d_draw_rect(gf2d_rect_to_sdl_rect(r), gf2d_color_to_vector4(color));
+    gf2d_draw_rect(gf2d_rect_to_sdl_rect(r), (color));
 }
 
 void gf2d_shape_draw(Shape shape, Color color)
