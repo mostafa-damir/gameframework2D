@@ -50,7 +50,7 @@ void healthKit_think(Entity* ent)
 	a = player_get_position();
 	b = ent->position;
 	float distance = vector2d_magnitude_between(a, b);
-	/*slog("%f", distance);*/
+	//slog("%f", distance);
 	if (distance < 16)
 	{
 		if (gfc_input_command_pressed("collect"))

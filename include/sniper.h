@@ -16,6 +16,8 @@ Entity* sniper_new(Vector2D position);
 
 Entity* sniper_get();
 
+Vector2D sniper_get_position();
+
 void sniper_think(Entity* ent);
 
 void sniper_update(Entity* ent);

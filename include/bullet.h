@@ -8,6 +8,10 @@ typedef struct Bullet_S
 {
 
 	int			damage;
+	int			hit;
+	int			team;
+	int			speed;
+
 }BulletData;
 /**
  * @brief spawn a new bullet at the given location
@@ -20,4 +24,14 @@ typedef struct Bullet_S
  * @return NULL on failure, or a pointer to the new projectile
  */
 Entity* bullet_new( Vector2D position, int team, float speed, int damage);
+
+Entity* bullet_get();
+
+Vector2D bullet_get_position();
+
+
+void bullet_think(Entity* ent);
+
+void bullet_update(Entity* ent);
+
 #endif

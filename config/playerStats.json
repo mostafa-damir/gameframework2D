@@ -1,6 +1,8 @@
 {
     "player":
     {
-        "speed" : 3
+        "speed" : 3,
+        "maxGrenade" : 3,
+        "ammoCarry" : 500 
     }
 }

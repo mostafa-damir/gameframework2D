@@ -19,6 +19,7 @@ typedef struct Entity_S
     int     health;
     int     damage;
     int     team;
+    int     hit;
     int     takeDamage;
     Bool    death;
     Vector2D drawOffset;
@@ -83,5 +84,8 @@ Shape entity_get_shape(Entity* ent);
  * @return a shape where its position + velocity is set to the world position
  */
 Shape entity_get_shape_after_move(Entity* ent);
+
+
+Entity* entity_list();
 
 #endif

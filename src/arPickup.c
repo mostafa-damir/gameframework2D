@@ -4,6 +4,7 @@
 #include "camera.h"
 #include "gf2d_draw.h"
 #include "gfc_input.h"
+#include "entity.h"
 #include "level.h"
 #include "player.h"
 

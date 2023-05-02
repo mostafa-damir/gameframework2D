@@ -9,6 +9,7 @@ typedef struct Grunt_S
 	int		health;
 	int		speed;
 	int		damage;
+	int		dead;
 }GruntData;
 
 
@@ -16,7 +17,8 @@ Entity* grunt_new(Vector2D position);
 
 Entity* grunt_get();
 
-//void grunt_draw(Entity* ent);
+void grunt_draw(Entity* ent);
+
 Vector2D grunt_get_position();
 
 void grunt_think(Entity* ent);

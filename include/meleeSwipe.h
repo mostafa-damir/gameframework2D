@@ -20,4 +20,14 @@
  * @return NULL on failure, or a pointer to the new projectile
  */
 Entity* meleeSwipe_new(Vector2D position, int team, int damage);
+
+
+Entity* meleeSwipe_get();
+
+Vector2D meleeSwipe_get_position();
+
+
+void meleeSwipe_think(Entity* ent);
+
+void meleeSwipe_update(Entity* ent);
 #endif

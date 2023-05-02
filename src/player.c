@@ -4,6 +4,8 @@
 #include "gui.h"
 #include "gf2d_graphics.h"
 #include "gf2d_draw.h"
+#include "stunMine.h"
+#include "gfc_audio.h"
 #include "camera.h"
 #include "healthKit.h"
 #include "level.h"
@@ -50,6 +52,8 @@ Entity* player_new(Vector2D position)
 	self->shape = self->shape;
 	vector2d_copy(self->position, position);
 	int speed;
+	int grenade;
+	int ac;
 	SJson* json,* player;
 	json = sj_load("config/playerStats.json");
 	if (!json)
@@ -59,16 +63,21 @@ Entity* player_new(Vector2D position)
 	player = sj_object_get_value(json, "player");
 
 	sj_object_get_value_as_int(player, "speed", &speed);
+	sj_object_get_value_as_int(player, "ammoCarry", &ac);
 
 	PlayerData* playerStat = gfc_allocate_array(sizeof(PlayerData), 1);
-	playerStat->ammo = 900;
-	playerStat->maxAmmo = 1000;
-	playerStat->armor = 25;
+	playerStat->ammo = 250;
+	playerStat->maxAmmo = ac;
+	playerStat->armor = 100;
 	playerStat->maxArmor = 100;
 	playerStat->health =  75;
 	playerStat->maxHealth = 100;
+	playerStat->maxGrenade = 3;
+	playerStat->maxStunGrenade = 3;
+	playerStat->maxSmokeGrenade = 3;
 	playerStat->cash = 0;
 	playerStat->ar = 0;
+	playerStat->stunned = 0;
 	playerStat->knife = 1;
 	playerStat->pistol = 1;
 	playerStat->smg = 1;
@@ -96,7 +105,7 @@ void player_draw(Entity* self)
 	if (!self)return;
 	camera = camera_get_draw_offset();
 	vector2d_add(drawPosition, self->position, camera);
-	gui_set_health(((PlayerData*)(self->data))->health / (float)((PlayerData*)(self->data))->maxHealth);
+	gui_set_health(((PlayerData*)(self->data))->health / ((PlayerData*)(self->data))->maxHealth);
 	Rect toDraw = self->shape.s.r;
 	toDraw.x += self->position.x;
 	toDraw.y += self->position.y;
@@ -113,26 +122,32 @@ void player_think(Entity* self)
 	if (!self) return;
 	self->velocity.x = 0;
 	self->velocity.y += 0.2;
+	Sound* shot = gfc_sound_load("audio/shot.mp3", 1, 1);
+	Sound* death = gfc_sound_load("audio/end.mp3", 1, 1);
 	if (((PlayerData*)(self->data))->health != 0)
 	{
 		if (level_shape_clip(level_get_active_level(), entity_get_shape_after_move(self)) == 1) {
 			if ((gfc_input_command_down("jump")))
 			{
 				self->velocity.y = -10;
+				gfc_sound_play(death, 0, 0.5, 0, -1);
+
 			}
 			else
 			{
 				self->velocity.y = 0;
 			}
 		}
-
-		if (gfc_input_command_down("walkleft"))
+		if(((PlayerData*)(self->data))->stunned == 0)
 		{
-			walk.x = -1;
-		}
-		if (gfc_input_command_down("walkright"))
-		{
-			walk.x += 1;
+			if (gfc_input_command_down("walkleft"))
+			{
+				walk.x = -1;
+			}
+			if (gfc_input_command_down("walkright"))
+			{
+				walk.x += 1;
+			}
 		}
 		if (gfc_input_command_down("hurt"))
 		{
@@ -233,7 +248,6 @@ void player_think(Entity* self)
 			vector2d_set_magnitude(&walk, ((PlayerData*)(self->data))->speed);
 			vector2d_copy(self->velocity, walk);
 		}
-
 		if (gfc_input_command_pressed("attack") && ((PlayerData*)(self->data))->ammo != 0)
 		{
 			Vector2D place = vector2d(0, 0);
@@ -241,27 +255,34 @@ void player_think(Entity* self)
 			place.y = self->position.y - 47;
 			if (((PlayerData*)(self->data))->selectedWeapon == 3)
 			{
+				gfc_sound_play(shot, 0, 0.5, 0, -1);
 				bullet_new(vector2d(place.x, place.y + 8), 1, 1, 10);
 				bullet_new(vector2d(place.x, place.y),1, 1, 10);
 				bullet_new(vector2d(place.x, place.y - 8),1, 1, 10);
 			}
 			else if (((PlayerData*)(self->data))->selectedWeapon == 5)
 			{
+				gfc_sound_play(shot, 0, 0.5, 0, -1);
 				bullet_new(vector2d(place.x, place.y),1, 0.1, 100);
 			}
 			else if (((PlayerData*)(self->data))->selectedWeapon == 6)
 			{
+				gfc_sound_play(shot, 0, 0.5, 0, -1);
 				bullet_new(vector2d(place.x, place.y),1, 0.4, 2);
 			}
 			else if (((PlayerData*)(self->data))->selectedWeapon == 7)
 			{
 				bullet_new(vector2d(place.x, place.y),1 , 0.3, 25);
+				gfc_sound_play(shot, 0, 0.5, 0, -1);
+
 			}
 			else if (((PlayerData*)(self->data))->selectedWeapon == 8)
 			{
 				bullet_new(vector2d(place.x, place.y),1 , 0.5, 10);
 				bullet_new(vector2d(place.x, place.y),1 , 0.3, 10);
 				bullet_new(vector2d(place.x, place.y),1 , 0.2, 10);
+				gfc_sound_play(shot, 0, 0.5, 0, -1);
+
 			}
 
 
@@ -273,15 +294,22 @@ void player_think(Entity* self)
 			place.y = self->position.y - 47;
 			if (((PlayerData*)(self->data))->selectedWeapon == 1)
 			{
+
 				bullet_new(vector2d(place.x, place.y),1 , 0.4, 10);
+				//gfc_sound_play(shot, 0, 0.5, 0, -1);
+
 			}
 			else if (((PlayerData*)(self->data))->selectedWeapon == 2)
 			{
 				bullet_new(vector2d(place.x, place.y),1 , 0.1, 5);
+				//gfc_sound_play(shot, 0, 0.5, 0, -1);
+
 			}
 			else if (((PlayerData*)(self->data))->selectedWeapon == 4)
 			{
 				bullet_new(vector2d(place.x, place.y),1, 1, 2);
+				//gfc_sound_play(shot, 0, 0.5, 0, -1);
+
 			}
 		}
 		if (gfc_input_command_pressed("melee"))

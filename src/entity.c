@@ -170,4 +170,8 @@ Shape entity_get_shape(Entity* ent)
     return shape;
 }
 
+Entity* entity_list() {
+    return entity_manager.entity_list;
+}
+
 /*eol@eof*/

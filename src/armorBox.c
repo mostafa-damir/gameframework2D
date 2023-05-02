@@ -51,7 +51,7 @@ void armorBox_think(Entity* ent)
 	a = player_get_position();
 	b = ent->position;
 	float distance = vector2d_magnitude_between(a, b);
-	if (distance < 16)
+	if (distance < 16 && ((PlayerData*)(player_get()->data))->armor < ((PlayerData*)(player_get()->data))->maxArmor)
 	{
 		if (gfc_input_command_pressed("collect"))
 		{

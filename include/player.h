@@ -26,8 +26,12 @@ typedef struct Player_S
 	int			maxAmmo;
 	int			cash;
 	int			health;
+	int			maxGrenade;
+	int			maxStunGrenade;
+	int			maxSmokeGrenade;
 	int			maxHealth;
 	int			ar;
+	int			stunned;
 	int			knife;
 	int			pistol;
 	int			smg;
