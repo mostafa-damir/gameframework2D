@@ -47,7 +47,7 @@ Entity* grunt_new(Vector2D position)
 void grunt_think(Entity* ent)
 {
 	if (!ent) return;
-	Sound* end = gfc_sound_load("audio/wilhelm.mp3", 1, 1);
+	//Sound* end = gfc_sound_load("audio/wilhelm.mp3", 1, 1);
 	ent->velocity.x = 0;
 	ent->velocity.y += 0.2;
 	if (level_shape_clip(level_get_active_level(), entity_get_shape_after_move(ent)) == 1) {
@@ -71,7 +71,7 @@ void grunt_think(Entity* ent)
 	}
 	else if (((GruntData*)(ent->data))->health <= 0)
 	{
-		gfc_sound_play(end, 0, 0.5, 0, -1);
+		//gfc_sound_play(end, 0, 0.5, 0, -1);
 		ent->sprite = gf2d_sprite_load_all("images/death-sprite.png",
 			64,
 			64,

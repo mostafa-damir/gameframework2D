@@ -11,6 +11,9 @@
 #include "level.h"
 #include "meleeSwipe.h"
 #include "bullet.h"
+#include "stim.h"
+#include "grenade.h"
+#include "grenadeThrown.h"
 #include "arPickup.h"
 #include "player.h"
 
@@ -73,8 +76,12 @@ Entity* player_new(Vector2D position)
 	playerStat->health =  75;
 	playerStat->maxHealth = 100;
 	playerStat->maxGrenade = 3;
+	playerStat->grenade = 0;
 	playerStat->maxStunGrenade = 3;
 	playerStat->maxSmokeGrenade = 3;
+	playerStat->maxStims = 2;
+	playerStat->slot = 1;
+	playerStat->currentStims = 0;
 	playerStat->cash = 0;
 	playerStat->ar = 0;
 	playerStat->stunned = 0;
@@ -324,6 +331,18 @@ void player_think(Entity* self)
 			else if (((PlayerData*)(self->data))->selectedWeapon == 9)
 			{
 				meleeSwipe_new(vector2d(place.x, place.y), 1, 100);
+
+			}
+		}
+		if (((PlayerData*)(self->data))->grenade > 0 && ((PlayerData*)(self->data))->slot == 1)
+		{
+			if (gfc_input_command_pressed("throw"))
+			{
+				Vector2D place = vector2d(0, 0);
+					place.x = self->position.x;
+					place.y = self->position.y - 47;
+					grenadeThrown_new(vector2d(place.x, place.y));
+					((PlayerData*)(self->data))->grenade = ((PlayerData*)(self->data))->grenade - 1;
 
 			}
 		}

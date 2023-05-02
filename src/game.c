@@ -18,9 +18,11 @@
 #include "spikeTrap.h"
 #include "armorBox.h"
 #include "stunMine.h"
+#include "stim.h"
 #include "armorUp.h"
 #include "arPickup.h"
 #include "mimic.h"
+#include "grenade.h"
 #include "laser.h"
 #include "mine.h"
 #include "cash.h"
@@ -95,8 +97,16 @@ int main(int argc, char* argv[])
     ent = arPickup_new(vector2d(700, 900));
     ent = shoes_new(vector2d(800, 900));
     ent = ammoBox_new(vector2d(300, 900));
-    ent = ammoBag_new(vector2d(600, 1050));
+    ent = stim_new(vector2d(350, 900));
+    ent = stim_new(vector2d(375, 900));
+    ent = stim_new(vector2d(450, 900));
     ent = armorUp_new(vector2d(100, 750));
+    ent = ammoBag_new(vector2d(600, 1050));
+    ent = grenade_new(vector2d(725, 1050));
+    ent = grenade_new(vector2d(750, 1050));
+    ent = grenade_new(vector2d(775, 1050));
+    ent = grenade_new(vector2d(675, 1050));
+    ent = grenade_new(vector2d(650, 1050));
     ent = healthKit_new(vector2d(150, 750));
     ent = healthKit_new(vector2d(125, 750));
     ent = mine_new(vector2d(300, 700));
