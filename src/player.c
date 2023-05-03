@@ -17,6 +17,7 @@
 #include "smokeGrenade.h"
 #include "grenadeThrown.h"
 #include "stunGrenadeThrown.h"
+#include "smokeGrenadeThrown.h"
 #include "arPickup.h"
 #include "player.h"
 
@@ -85,6 +86,8 @@ Entity* player_new(Vector2D position)
 	playerStat->maxStunGrenade = 3;
 	playerStat->maxSmokeGrenade = 3;
 	playerStat->maxStims = 2;
+	playerStat->smokeHealth = 250;
+	playerStat->smoke = 0;
 	playerStat->slot = 1;
 	playerStat->currentStims = 0;
 	playerStat->cash = 0;
@@ -383,6 +386,32 @@ void player_think(Entity* self)
 				((PlayerData*)(self->data))->stunGrenade = ((PlayerData*)(self->data))->stunGrenade - 1;
 
 			}
+		}
+
+		if (((PlayerData*)(self->data))->smokeGrenade > 0 && ((PlayerData*)(self->data))->slot == 3)
+		{
+			if (gfc_input_command_pressed("throw"))
+			{
+				//slog("yo");
+				Vector2D place = vector2d(0, 0);
+				place.x = self->position.x;
+				place.y = self->position.y - 47;
+				smokeGrenadeThrown_new(vector2d(place.x, place.y));
+				((PlayerData*)(self->data))->smokeGrenade = ((PlayerData*)(self->data))->smokeGrenade - 1;
+				((PlayerData*)(self->data))->smoke = 1;
+				((PlayerData*)(self->data))->smokeHealth = 250;
+
+			}
+		
+		}
+		if (((PlayerData*)(self->data))->smoke == 1)
+		{
+			((PlayerData*)(self->data))->smokeHealth--;
+
+		}
+		if (((PlayerData*)(self->data))->smokeHealth == 0)
+		{
+			((PlayerData*)(self->data))->smoke = 0;
 		}
 
 		if (((PlayerData*)(self->data))->currentStims != 0)

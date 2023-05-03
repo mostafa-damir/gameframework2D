@@ -61,7 +61,7 @@ void grunt_think(Entity* ent)
 		a = player_get_position();
 		b = ent->position;
 		float distance = vector2d_magnitude_between(a, b);
-		if (distance  < 200 && ((GruntData*)(ent->data))->stunned != 1)
+		if (distance  < 200 && ((GruntData*)(ent->data))->stunned != 1 && ((PlayerData*)(player_get()->data))->smoke == 0)
 		{
 			//ent->velocity.x -= 1;
 			Vector2D place = vector2d(0, 0);

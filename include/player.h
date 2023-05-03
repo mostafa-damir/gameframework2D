@@ -36,6 +36,8 @@ typedef struct Player_S
 	int			maxStims;
 	int			currentStims;
 	int			maxHealth;
+	int			smokeHealth;
+	int			smoke;
 	int			ar;
 	int			stunned;
 	int			knife;

@@ -149,6 +149,7 @@ int main(int argc, char* argv[])
                 firstBoss_new(vector2d(1900, 800));
                 sniper_new(vector2d(700, 650));
                 player_new(vector2d(100, 900));
+                smokeGrenade_new(vector2d(125, 900));
                 spikeTrap_new(vector2d(550, 1000));
             }
         }
