@@ -36,6 +36,8 @@ Entity* grunt_new(Vector2D position)
 	gruntStat->health = 100;
 	gruntStat->speed = 2.5;
 	gruntStat->damage = 10;
+	gruntStat->stunned = 0;
+	gruntStat->stunTime = 250;
 	gruntStat->dead = 0;
 	ent->data = gruntStat;
 	Grunt = ent;
@@ -53,13 +55,13 @@ void grunt_think(Entity* ent)
 	if (level_shape_clip(level_get_active_level(), entity_get_shape_after_move(ent)) == 1) {
 		ent->velocity.y = 0;
 	}
-	if (((GruntData*)(ent->data))->health > 0)
+	if (((GruntData*)(ent->data))->health > 0 )
 	{
 		Vector2D  a, b;
 		a = player_get_position();
 		b = ent->position;
 		float distance = vector2d_magnitude_between(a, b);
-		if (distance  < 200/* && player_get_position().y == ent->position.y*/)
+		if (distance  < 200 && ((GruntData*)(ent->data))->stunned != 1)
 		{
 			//ent->velocity.x -= 1;
 			Vector2D place = vector2d(0, 0);
@@ -67,7 +69,16 @@ void grunt_think(Entity* ent)
 			place.y = ent->position.y - 47;
 			bullet_new(vector2d(place.x, place.y), 2, 0.1, 10);
 		}
-
+		if (((GruntData*)(ent->data))->stunned == 1)
+		{
+			((GruntData*)(ent->data))->stunTime--;
+			if (((GruntData*)(ent->data))->stunTime == 0)
+			{
+				((GruntData*)(ent->data))->stunned = 0;
+				((GruntData*)(ent->data))->stunTime = 250;
+			}
+		}
+	
 	}
 	else if (((GruntData*)(ent->data))->health <= 0)
 	{

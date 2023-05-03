@@ -72,22 +72,12 @@ void stim_think(Entity* ent)
 		}
 
 	}
-	if (((PlayerData*)(player_get()->data))->currentStims > 0)
-	{
-		if (gfc_input_command_pressed("heal"))
-		{
-			slog("hello");
-			if (((PlayerData*)(player_get()->data))->health < ((PlayerData*)(player_get()->data))->maxHealth)
-			{
-				((PlayerData*)(player_get()->data))->currentStims = ((PlayerData*)(player_get()->data))->currentStims - 1;
-				slog("%i", ((PlayerData*)(player_get()->data))->currentStims);
-				((PlayerData*)(player_get()->data))->health = min(((PlayerData*)(player_get()->data))->health + ((stimData*)(ent->data))->healthPlus, ((PlayerData*)(player_get()->data))->maxHealth);
-				slog("%i", ((PlayerData*)(player_get()->data))->health);
-			}
 
-		}
-	}
+}
 
+Entity* stim_get()
+{
+	return Stim;
 }
 
 void stim_free(Entity* ent)

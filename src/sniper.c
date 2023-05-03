@@ -35,6 +35,8 @@ Entity* sniper_new(Vector2D position)
 	Stat->health = 150;
 	Stat->speed = 2.5;
 	Stat->damage = 10;
+	Stat->stunned = 0;
+	Stat->stunTime = 250;
 	ent->data = Stat;
 	SniperDude = ent;
 	return ent;
@@ -59,13 +61,22 @@ void sniper_think(Entity* ent)
 		a = player_get_position();
 		b = ent->position;
 		float distance = vector2d_magnitude_between(a, b);
-		if (distance < 150)
+		if (distance < 150 && ((SniperData*)(ent->data))->stunned != 1)
 		{
 			ent->velocity.x += 0.5;
 			//Vector2D place = vector2d(0, 0);
 			//place.x = ent->position.x;
 			//place.y = ent->position.y - 47;
 			//bullet_new(vector2d(place.x, place.y), 2, 0.1, 10);
+		}
+		if (((SniperData*)(ent->data))->stunned == 1)
+		{
+			((SniperData*)(ent->data))->stunTime--;
+			if (((SniperData*)(ent->data))->stunTime == 0)
+			{
+				((SniperData*)(ent->data))->stunned = 0;
+				((SniperData*)(ent->data))->stunTime = 250;
+			}
 		}
 	}
 	else if (((SniperData*)(ent->data))->health <= 0)

@@ -25,7 +25,7 @@ Entity* laser_new(Vector2D position)
 	vector2d_copy(ent->position, position);
 	ent->drawOffset = vector2d(32, 64);
 	ent->shape = gfc_shape_rect(-32, -37, 64, 37);
-	ent->draw = laser_draw;
+	//ent->draw = laser_draw;
 	return ent;
 }
 

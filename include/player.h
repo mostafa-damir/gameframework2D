@@ -28,6 +28,8 @@ typedef struct Player_S
 	int			health;
 	int			maxGrenade;
 	int			grenade;
+	int			stunGrenade;
+	int			smokeGrenade;
 	int			slot;
 	int			maxStunGrenade;
 	int			maxSmokeGrenade;

@@ -23,6 +23,7 @@
 #include "arPickup.h"
 #include "mimic.h"
 #include "grenade.h"
+#include "stunGrenade.h"
 #include "laser.h"
 #include "mine.h"
 #include "cash.h"
@@ -47,6 +48,7 @@ int main(int argc, char* argv[])
 
     int mx, my;
     int menu = 1;
+    int over = 0;
     float mf = 0; 
     //Sprite* mouse;
     //Sprite* pistol;
@@ -83,42 +85,10 @@ int main(int argc, char* argv[])
     sprite = gf2d_sprite_load_image("images/backgrounds/bg_flat.png");
     //sprite = gf2d_sprite_load_image("images/hud-sprite.png");
     //mouse = gf2d_sprite_load_all("images/pointer.png", 32, 32, 16, 0);
-    level = level_load("config/test.level");
-    level_set_active_level(level);
+  
     //ent = space_bug_new(vector2d(1000, 1000));
-    gui_setup_hud();
+  
     Sound* mainSong = gfc_sound_load("audio/contra1.mp3", 1, 1);
-    ent = healthKit_new(vector2d(200, 900));
-    ent = mimic_new(vector2d(150, 900));
-    ent = sachel_new(vector2d(400, 900));
-    ent = armorBox_new(vector2d(500, 900));
-    ent = cash_new(vector2d(600, 900));
-    ent = meleeGrunt_new(vector2d(800, 650));
-    ent = arPickup_new(vector2d(700, 900));
-    ent = shoes_new(vector2d(800, 900));
-    ent = ammoBox_new(vector2d(300, 900));
-    ent = stim_new(vector2d(350, 900));
-    ent = stim_new(vector2d(375, 900));
-    ent = stim_new(vector2d(450, 900));
-    ent = armorUp_new(vector2d(100, 750));
-    ent = ammoBag_new(vector2d(600, 1050));
-    ent = grenade_new(vector2d(725, 1050));
-    ent = grenade_new(vector2d(750, 1050));
-    ent = grenade_new(vector2d(775, 1050));
-    ent = grenade_new(vector2d(675, 1050));
-    ent = grenade_new(vector2d(650, 1050));
-    ent = healthKit_new(vector2d(150, 750));
-    ent = healthKit_new(vector2d(125, 750));
-    ent = mine_new(vector2d(300, 700));
-    ent = laser_new(vector2d(200, 750));
-    ent = stunMine_new(vector2d(400, 700));
-    ent = healthUp_new(vector2d(250, 900));
-    ent = grunt_new(vector2d(800, 1050));
-    ent = gunner_new(vector2d(1000, 1000));
-    ent = firstBoss_new(vector2d(1900, 800));
-    ent = sniper_new(vector2d(700, 650));
-    ent = player_new(vector2d(100, 900));
-    ent = spikeTrap_new(vector2d(550, 1000));
 
     /*main game loop*/
     while (!done)
@@ -136,14 +106,50 @@ int main(int argc, char* argv[])
             //backgrounds drawn first
         //UI elements last
         gf2d_graphics_next_frame();// render current draw frame and skip to the next frame
-
         if (menu)
         {
             gf2d_sprite_draw_image(mainMenu, vector2d(0, 0));
-            if (keys[SDL_SCANCODE_RETURN])
+            if (gfc_input_command_pressed("enter"))
             {
                 menu = 0;
+                level = level_load("config/test.level");
+                level_set_active_level(level);
+                gui_setup_hud();
                 gfc_sound_play(mainSong, 999, 0.5, -1, -1);
+                healthKit_new(vector2d(200, 900));
+                mimic_new(vector2d(150, 900));
+                sachel_new(vector2d(400, 900));
+                armorBox_new(vector2d(500, 900));
+                cash_new(vector2d(600, 900));
+                meleeGrunt_new(vector2d(800, 650));
+                arPickup_new(vector2d(700, 900));
+                shoes_new(vector2d(800, 900));
+                ammoBox_new(vector2d(300, 900));
+                stim_new(vector2d(350, 900));
+                stim_new(vector2d(375, 900));
+                //stim_new(vector2d(450, 900));
+                armorUp_new(vector2d(100, 750));
+                ammoBag_new(vector2d(600, 1050));
+                grenade_new(vector2d(725, 1050));
+                grenade_new(vector2d(750, 1050));
+                grenade_new(vector2d(775, 1050));
+                grenade_new(vector2d(675, 1050));
+                grenade_new(vector2d(650, 1050));
+                stunGrenade_new(vector2d(450, 900));
+                stunGrenade_new(vector2d(450, 750));
+                stunGrenade_new(vector2d(500, 750));
+                healthKit_new(vector2d(150, 750));
+                healthKit_new(vector2d(125, 750));
+                mine_new(vector2d(300, 700));
+                laser_new(vector2d(200, 750));
+                stunMine_new(vector2d(400, 700));
+                healthUp_new(vector2d(250, 900));
+                grunt_new(vector2d(800, 1050));
+                gunner_new(vector2d(1000, 1000));
+                firstBoss_new(vector2d(1900, 800));
+                sniper_new(vector2d(700, 650));
+                player_new(vector2d(100, 900));
+                spikeTrap_new(vector2d(550, 1000));
             }
         }
         else
@@ -157,30 +163,37 @@ int main(int argc, char* argv[])
             entity_draw_all();
             gui_draw_hud();
         }
-
-        if (((PlayerData*)(player_get()->data))->health <= 0)
+        if (!menu && ((PlayerData*)(player_get()->data))->health <= 0)
+        {
+            over = 1;
+        }
+        if (over)
         {
             gf2d_sprite_draw_image(gameOver, vector2d(0, 0));
-        //    if (keys[SDL_SCANCODE_RETURN])
-        //    //{
-        //    //    menu = 1;
-        //    //}
-        }
+            if (gfc_input_command_released("enter") && over)
+            {
+                entity_free_all();
+                menu = 1;
+                over = 0;
+            }
 
+        }     
         if (keys[SDL_SCANCODE_ESCAPE])done = 1; // exit condition
         //slog("Rendering at %f FPS",gf2d_graphics_get_frames_per_second());
     }
-    level_free(level);
-    entity_free(ent);
-    slog("---==== END ====---");
-
-
     SJson* json, * a;
     json = sj_load("config/scores.json");
     a = sj_copy(json);
 
     sj_object_insert(a, "score", sj_new_int(((PlayerData*)(player_get()->data))->cash));
     sj_save(a, "config/scores.json");
+    if(level_get_active_level())
+    level_free(level_get_active_level());
+    entity_free_all();
+    slog("---==== END ====---");
+
+
+   
 
     return 0;
 }

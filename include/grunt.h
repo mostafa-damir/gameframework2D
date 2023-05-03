@@ -9,6 +9,8 @@ typedef struct Grunt_S
 	int		health;
 	int		speed;
 	int		damage;
+	int		stunned;
+	int		stunTime;
 	int		dead;
 }GruntData;
 

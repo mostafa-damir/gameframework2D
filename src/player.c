@@ -13,7 +13,10 @@
 #include "bullet.h"
 #include "stim.h"
 #include "grenade.h"
+#include "stunGrenade.h"
+#include "smokeGrenade.h"
 #include "grenadeThrown.h"
+#include "stunGrenadeThrown.h"
 #include "arPickup.h"
 #include "player.h"
 
@@ -77,6 +80,8 @@ Entity* player_new(Vector2D position)
 	playerStat->maxHealth = 100;
 	playerStat->maxGrenade = 3;
 	playerStat->grenade = 0;
+	playerStat->stunGrenade = 0;
+	playerStat->smokeGrenade = 0;
 	playerStat->maxStunGrenade = 3;
 	playerStat->maxSmokeGrenade = 3;
 	playerStat->maxStims = 2;
@@ -334,6 +339,25 @@ void player_think(Entity* self)
 
 			}
 		}
+		if (gfc_input_command_pressed("switch"))
+		{
+			if (((PlayerData*)(self->data))->slot == 1)
+			{
+				
+				((PlayerData*)(self->data))->slot = 2;
+				slog("switch to stun");
+			}
+			else if (((PlayerData*)(self->data))->slot == 2)
+			{
+				((PlayerData*)(self->data))->slot = 3;
+				slog("switch to smoke");
+			}
+			else
+			{
+				((PlayerData*)(self->data))->slot = 1;
+				slog("switched to frags");
+			}
+		}
 		if (((PlayerData*)(self->data))->grenade > 0 && ((PlayerData*)(self->data))->slot == 1)
 		{
 			if (gfc_input_command_pressed("throw"))
@@ -343,6 +367,33 @@ void player_think(Entity* self)
 					place.y = self->position.y - 47;
 					grenadeThrown_new(vector2d(place.x, place.y));
 					((PlayerData*)(self->data))->grenade = ((PlayerData*)(self->data))->grenade - 1;
+
+			}
+		}
+
+		if (((PlayerData*)(self->data))->stunGrenade > 0 && ((PlayerData*)(self->data))->slot == 2)
+		{
+			if (gfc_input_command_pressed("throw"))
+			{
+				//slog("yo");
+				Vector2D place = vector2d(0, 0);
+				place.x = self->position.x;
+				place.y = self->position.y - 47;
+				stunGrenadeThrown_new(vector2d(place.x, place.y));
+				((PlayerData*)(self->data))->stunGrenade = ((PlayerData*)(self->data))->stunGrenade - 1;
+
+			}
+		}
+
+		if (((PlayerData*)(self->data))->currentStims != 0)
+		{
+			if (gfc_input_command_pressed("heal") && ((PlayerData*)(self->data))->health < ((PlayerData*)(self->data))->maxHealth)
+			{
+
+				((PlayerData*)(self->data))->currentStims = ((PlayerData*)(self->data))->currentStims  - 1;
+				slog("%i", ((PlayerData*)(self->data))->currentStims);
+				((PlayerData*)(self->data))->health = ((PlayerData*)(self->data))->health + 5;
+				slog("%i", ((PlayerData*)(self->data))->health);
 
 			}
 		}
