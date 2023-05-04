@@ -73,7 +73,9 @@ void shield_draw(Entity* ent)
 Vector2D shield_get_position()
 {
     Vector2D v = { 0 };
-    if (!shield)return v;
+    if (!shield) return v;
+    return shield->position;
+
 }
 
 Entity* shield_get()

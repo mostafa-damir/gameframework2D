@@ -8,6 +8,7 @@
 #include "collision.h"
 #include "bullet.h"
 #include "player.h"
+#include "shield.h"
 #include "firstBoss.h"
 #include "grunt.h"
 #include "meleeGrunt.h"
@@ -106,12 +107,20 @@ void bullet_think(Entity* ent)
             //slog("%i", ((firstBossData*)(firstBoss_get()->data))->health);
             entity_free(ent);
         }
-
         
     }
     else
     {
         ent->velocity.x -= ent->speed;
+        Vector2D  x, y;
+        x = shield_get_position();
+        y = ent->position;
+        float distance = vector2d_magnitude_between(x, y);
+        if (distance < 25 && ((PlayerData*)(player_get()->data))->shieldHealth > 0)
+        {
+            entity_free(ent);
+        }
+      
     }
     if (gfc_input_command_pressed("attack") && ((PlayerData*)(player_get()->data))->ammo != 0 && ent->team == 1)
     {
@@ -121,6 +130,7 @@ void bullet_think(Entity* ent)
     if (level_shape_clip(level_get_active_level(), entity_get_shape_after_move(ent)) != 0) { //if touching a platform
         entity_free(ent);
     }
+ 
   
 
    
