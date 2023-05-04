@@ -35,7 +35,7 @@ Entity* bullet_new(Vector2D position, int team, float speed, int damage)
         0);
     ent->think = bullet_think;
     //ent->drawOffset = vector2d(16, 32);
-    ent->shape = gfc_shape_rect(0, 0, 16, 31);
+    ent->shape = gfc_shape_rect(0, 16, 16, 16);
     //ent->draw = bullet_draw;
     ent->free_entity = bullet_free;
     vector2d_copy(ent->position, position);

@@ -34,10 +34,14 @@ typedef struct Player_S
 	int			maxStunGrenade;
 	int			maxSmokeGrenade;
 	int			maxStims;
+	int			maxShields;
+	int			generator;
 	int			currentStims;
 	int			maxHealth;
 	int			smokeHealth;
+	int			shieldHealth;
 	int			smoke;
+	int			shield;
 	int			ar;
 	int			stunned;
 	int			knife;

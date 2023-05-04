@@ -24,6 +24,7 @@
 #include "mimic.h"
 #include "grenade.h"
 #include "stunGrenade.h"
+#include "smokeGrenade.h"
 #include "laser.h"
 #include "mine.h"
 #include "cash.h"
@@ -31,6 +32,7 @@
 #include "space_bug.h"
 #include "player.h"
 #include "meleeGrunt.h"
+#include "generator.h"
 #include "grunt.h"
 #include "gunner.h"
 #include "firstBoss.h"
@@ -121,6 +123,8 @@ int main(int argc, char* argv[])
                 sachel_new(vector2d(400, 900));
                 armorBox_new(vector2d(500, 900));
                 cash_new(vector2d(600, 900));
+                generator_new(vector2d(550, 900));
+                generator_new(vector2d(575, 900));
                 meleeGrunt_new(vector2d(800, 650));
                 arPickup_new(vector2d(700, 900));
                 shoes_new(vector2d(800, 900));

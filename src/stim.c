@@ -53,7 +53,7 @@ void stim_think(Entity* ent)
 	//slog("%f", distance);
 	if (distance < 16)
 	{
-		if (((PlayerData*)(player_get()->data))->currentStims != ((PlayerData*)(player_get()->data))->maxStims)
+		if (((PlayerData*)(player_get()->data))->currentStims != ((PlayerData*)(player_get()->data))->maxStims && ((PlayerData*)(player_get()->data))->generator == 0)
 		{
 			if (gfc_input_command_pressed("collect"))
 			{

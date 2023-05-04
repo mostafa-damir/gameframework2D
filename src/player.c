@@ -12,7 +12,9 @@
 #include "meleeSwipe.h"
 #include "bullet.h"
 #include "stim.h"
+#include "shield.h"
 #include "grenade.h"
+#include "generator.h"
 #include "stunGrenade.h"
 #include "smokeGrenade.h"
 #include "grenadeThrown.h"
@@ -87,7 +89,10 @@ Entity* player_new(Vector2D position)
 	playerStat->maxSmokeGrenade = 3;
 	playerStat->maxStims = 2;
 	playerStat->smokeHealth = 250;
+	playerStat->shieldHealth = 250;
 	playerStat->smoke = 0;
+	playerStat->shield = 0;
+	playerStat->maxShields = 2;
 	playerStat->slot = 1;
 	playerStat->currentStims = 0;
 	playerStat->cash = 0;
@@ -425,6 +430,29 @@ void player_think(Entity* self)
 				slog("%i", ((PlayerData*)(self->data))->health);
 
 			}
+		}
+		if (((PlayerData*)(self->data))->generator != 0)
+		{
+			if (gfc_input_command_pressed("shield"))
+			{
+				Vector2D place = vector2d(0, 0);
+				place.x = self->position.x;
+				place.y = self->position.y - 47;
+				shield_new(vector2d(place.x, place.y));
+				((PlayerData*)(self->data))->generator = ((PlayerData*)(self->data))->generator - 1;
+				slog("%i", ((PlayerData*)(self->data))->generator);
+				((PlayerData*)(self->data))->shield = 1;
+				((PlayerData*)(self->data))->shieldHealth = 250;
+			}
+		}
+		if (((PlayerData*)(self->data))->shield == 1)
+		{
+			((PlayerData*)(self->data))->shieldHealth--;
+
+		}
+		if (((PlayerData*)(self->data))->shieldHealth == 0)
+		{
+			((PlayerData*)(self->data))->shield = 0;
 		}
 	}
 	camera_center_at(self->position);
